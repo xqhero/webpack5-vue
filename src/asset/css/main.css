@@ -1,0 +1,18 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: '汉体';
+    src: url(../fonts/汉体.ttf);
+}
+
+body {
+    font-size: 16px;
+    font-family: '汉体';
+    background-image: url(../images/bg.jpg);
+    background-size:cover;
+    background-position: top center;
+}
+
