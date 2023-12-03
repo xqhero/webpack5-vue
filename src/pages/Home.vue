@@ -21,6 +21,7 @@
         console.info(num.value)
         num.value--;
     }
+    console.log(process.env)
 </script>
 <style scoped>
     .slog {

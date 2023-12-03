@@ -8,10 +8,23 @@ const {VueLoaderPlugin} = require('vue-loader')
 const {DefinePlugin} = require('webpack')
 
 
-
 const isProduction = process.env.NODE_ENV=='production'
 
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
+
+require('dotenv').config({path: `.env.${process.env.NODE_ENV}`})
+
+let env = {
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: true
+}
+
+for( const key in process.env) {
+    if(key == "NODE_ENV" || key == "BASE_URL" || /^VUE_APP_/.test(key)) {
+        env[key] = process.env[key]
+    }
+}
+
 
 const config = {
     mode: isProduction ? 'production': 'development',
@@ -108,11 +121,6 @@ const config = {
         // 用于模块搜索的文件后缀
         extensions: ['.ts','.tsx','...']
     },
-    externals: {
-        // 外部扩展
-        'vue': 'Vue',
-        'vue-router': 'VueRouter'
-    },
     plugins: [
         // 插件
         new HtmlWebpackPlugin({
@@ -144,9 +152,8 @@ const config = {
         }),
         new VueLoaderPlugin(),
         new DefinePlugin({
-            __VUE_OPTIONS_API__: JSON.stringify(true),
-            __VUE_PROD_DEVTOOLS__: JSON.stringify(true)
-        })
+            "process.env": JSON.stringify(env)
+        }),
     ]
 }
 
@@ -204,6 +211,13 @@ module.exports = () => {
                 }]
             }) 
         )
+
+        // 设置外部扩展
+        config.externals = {
+            // 外部扩展
+            'vue': 'Vue',
+            'vue-router': 'VueRouter'
+        }
     }
     return config;
 }
